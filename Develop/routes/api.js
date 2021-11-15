@@ -60,17 +60,18 @@ router.get("/api/workouts", (req, res) => {
 });
 
 
-router.get("/api/workouts", (req, res) => {
+router.get("/api/workouts/range", (req, res) => {
     Workout.aggregate( [
         {
             $addFields: {
                 totalDuration:{
-                    $sum:"$exercises.weight"
+                    $sum:"$exercises.duration"
                 }
             }
         }
     ])
       .sort({ date: -1 })
+      .limit(7)
       .then(dbWorkout => {
         res.json(dbWorkout);
       })
@@ -79,17 +80,5 @@ router.get("/api/workouts", (req, res) => {
       });
   });
 
-  // router.delete("/api/workouts/:id", (req, res) => {
-  //   Workout.findByIdAndDelete(
-  //       params.id,
-  //       {$destroy:{exercises:body}},
-  //   )
-  //     .then(dbWorkout => {
-  //       res.json(dbWorkout);
-  //     })
-  //     .catch(err => {
-  //       res.status(400).json(err);
-  //     });
-  // });
 
 module.exports = router;
