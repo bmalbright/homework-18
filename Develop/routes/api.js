@@ -2,6 +2,7 @@ const router = require("express").Router();
 const {Workout} = require ("../models");
 const path = require("path")
 
+// links to the html pages
 router.get("/", (req, res) =>
     res.sendFile(path.join(__dirname, "../public/index.html"))
 );
@@ -14,7 +15,7 @@ router.get("/stats", (req, res) =>
     res.sendFile(path.join(__dirname, "../public/stats.html"))
 );
 
-
+// post route to create workouts
 router.post("/api/workouts", ({ body }, res) => {
   Workout.create(body)
     .then(dbWorkout => {
@@ -25,6 +26,7 @@ router.post("/api/workouts", ({ body }, res) => {
     });
 });
 
+// put route to updates workouts with new exercises
 router.put("/api/workouts/:id", ({ body, params }, res) => {
   Workout.findByIdAndUpdate(
       params.id,
@@ -39,6 +41,7 @@ router.put("/api/workouts/:id", ({ body, params }, res) => {
     });
 });
 
+// These two get routes use aggregate to get the total duration and total weight for the charts in the dashboard
 router.get("/api/workouts", (req, res) => {
   Workout.aggregate( [
     {
